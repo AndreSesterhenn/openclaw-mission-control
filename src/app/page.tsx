@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Activity, Cpu, Clock, Server, Bot, Calendar, FileText, MessageSquare } from "lucide-react";
+import { Activity, Cpu, Clock, Server, Bot, Calendar, FileText, MessageSquare, GitHub } from "lucide-react";
 
 interface SystemState {
   gateway: { status: string; uptime: string };
@@ -57,6 +57,13 @@ export default function HomePage() {
       detail: system?.backups.last || "None yet",
     },
     {
+      title: "GitHub Repo",
+      icon: GitHub,
+      status: "healthy",
+      detail: "openclaw-mission-control",
+      link: "https://github.com/AndreSesterhenn/openclaw-mission-control",
+    },
+    {
       title: "Quick Stats",
       icon: Cpu,
       status: "healthy",
@@ -92,25 +99,30 @@ export default function HomePage() {
 
       <main className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {cards.map((card, idx) => (
-            <div
-              key={card.title}
-              className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-sm transition hover:bg-white/10"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold">{card.title}</h3>
-                <card.icon className="w-5 h-5 text-gray-400" />
-              </div>
-              <div className="flex items-center gap-2">
-                <span
-                  className={`w-2 h-2 rounded-full ${
-                    card.status === "healthy" ? "bg-green-500" : "bg-red-500"
-                  }`}
-                />
-                <span className="text-sm text-gray-300">{card.detail}</span>
-              </div>
-            </div>
-          ))}
+          {cards.map((card, idx) => {
+            const CardWrapper = card.link ? "a" : "div";
+            const cardProps = card.link ? { href: card.link, target: "_blank", rel: "noopener noreferrer" } : {};
+            return (
+              <CardWrapper
+                key={card.title}
+                className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-sm transition hover:bg-white/10"
+                {...cardProps}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">{card.title}</h3>
+                  <card.icon className="w-5 h-5 text-gray-400" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`w-2 h-2 rounded-full ${
+                      card.status === "healthy" ? "bg-green-500" : "bg-red-500"
+                    }`}
+                  />
+                  <span className="text-sm text-gray-300">{card.detail}</span>
+                </div>
+              </CardWrapper>
+            );
+          })}
         </div>
 
         <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
@@ -128,6 +140,14 @@ export default function HomePage() {
             <button className="px-4 py-2 bg-secondary text-secondary-foreground rounded-lg text-sm font-medium hover:opacity-90">
               View Logs
             </button>
+            <a
+              href="https://github.com/AndreSesterhenn/openclaw-mission-control"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 bg-secondary text-secondary-foreground rounded-lg text-sm font-medium hover:opacity-90"
+            >
+              GitHub Repo
+            </a>
           </div>
         </div>
       </main>

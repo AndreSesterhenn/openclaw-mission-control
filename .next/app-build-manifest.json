@@ -1,0 +1,9 @@
+{
+  "pages": {
+    "/api/system-state/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/system-state/route.js"
+    ]
+  }
+}

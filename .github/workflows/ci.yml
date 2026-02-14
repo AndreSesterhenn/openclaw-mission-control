@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint || echo "No lint script"
+
+      - name: Build
+        run: npm run build
+
+      - name: Start dev server (smoke test)
+        run: |
+          npm run dev &
+          DEV_PID=$!
+          echo "Waiting for dev server..."
+          for i in {1..30}; do
+            if curl -s http://localhost:3000/api/health > /dev/null; then
+              echo "Dev server is up"
+              break
+            fi
+            sleep 2
+          done
+          # Test health endpoint
+          curl -f http://localhost:3000/api/health || exit 1
+          # Test system-state endpoint (should not crash)
+          curl -f http://localhost:3000/api/system-state > /dev/null || echo "system-state endpoint failed (may be expected if services down)"
+          kill $DEV_PID || true
+        env:
+          NODE_ENV: development

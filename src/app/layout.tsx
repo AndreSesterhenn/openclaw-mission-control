@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const navItems = [
-  "HOME", "OPS", "AGENTS", "CHAT", "CONTENT", "COMMS", "KNOWLEDGE", "CODE"
+  "HOME", "OPS", "AGENTS", "CHAT", "CONTENT", "COMMS", "KNOWLEDGE", "CODE", "ARTIFACTS"
 ];
 
 export default function RootLayout({
